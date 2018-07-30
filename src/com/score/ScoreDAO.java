@@ -193,6 +193,32 @@ public class ScoreDAO {
 		
 	}
 	
+	//5.ªË¡¶
+	
+	public int deleteData(String hak){
+		int result = 0;
+		String sql = "";
+		PreparedStatement pstmt = null;
+		
+		try {
+			
+			sql ="delete from score where hak=?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, hak);
+			
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			// TODO: handle exception
+		}
+		
+		return result;
+		
+	}
+	
 	
 }
 

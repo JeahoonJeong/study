@@ -95,7 +95,8 @@
 		<td align="center" bgcolor="#ffffff"><%=dto.getAve() %></td>
 		<td align="center" bgcolor="#ffffff"><%=dto.getRank() %></td>
 		<td align="center" bgcolor="#ffffff">
-			<a href="<%=cp %>/score/update.jsp?hak=<%=dto.getHak()%>">수정</a> 삭제
+			<a href="<%=cp %>/score/update.jsp?hak=<%=dto.getHak()%>">수정</a> 
+			<a href="<%=cp %>/score/delete_ok.jsp?hak=<%=dto.getHak()%>">삭제</a>
 		</td>
 	</tr>
 	
