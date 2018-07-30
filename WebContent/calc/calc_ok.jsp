@@ -22,7 +22,7 @@
 <jsp:setProperty property="su1" name="ob" value="<%=su1 %>"/>
 <jsp:setProperty property="su2" name="ob" value="<%=su2 %>"/>
 <jsp:setProperty property="oper" name="ob" value="<%=oper %>"/>
-
+<!-- 이곳의 에러는 무시한다.  -->
 <!-- <jsp:useBean id="ob" class="com.calc.Calc" scope="page"/>
 <jsp:setProperty property="*" name="ob" />
 jsp파일의변수이름과 class변수이름이 정확히 같아야 한다. db를 사용한다면 column이름도 같아야한다-->
