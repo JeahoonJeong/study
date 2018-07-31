@@ -73,6 +73,8 @@ public class MyUtil {
 				
 			}
 			
+			//java.lang.OutOfMemoryError: Java heap space
+			//while문이 무한루프를 돌아서 생기는 에러. while문을 사용할때는 주의 하도록한다.
 			page++;
 			
 		}
