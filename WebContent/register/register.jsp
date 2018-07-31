@@ -109,9 +109,9 @@ function finalCheck() {
 		return;
 	}
 	
-	if(!f.useremail.value){
+	if(!f.email1.value){
 		alert("이메일을 입력하세요.")
-		f.useremail.focus();
+		f.email1.focus();
 		return;
 	}
 	
@@ -121,9 +121,9 @@ function finalCheck() {
 		return;
 	}
 	
-	if(f.usertel.selectedIndex==0){
+	if(f.tel1.selectedIndex==0){
 		alert("전화번호를 입력하세요")
-		f.usertel.focus();
+		f.tel1.focus();
 		return;
 	}
 	
@@ -145,7 +145,18 @@ function finalCheck() {
 		return;
 	}
 	
+	//email1,2 합치기
 	
+	var email1 = document.mainForm.email1.value;
+	var email2 = document.mainForm.email2.value;
+	document.mainForm.useremail.value = email1+"@"+email2;
+	
+	var tel1 = document.mainForm.tel1.value;
+	var tel2 = document.mainForm.tel2.value;
+	var tel3 = document.mainForm.tel3.value;
+	document.mainForm.usertel.value = tel1+"-"+tel2+"-"+tel3;
+	
+	alert(document.mainForm.usertel.value);
 	
 	
 	f.action = "register_ok.jsp";
@@ -217,7 +228,7 @@ table.password{
 }
 
 /*이메일 첫번째박스*/
-.useremail{
+.email1{
 	width: 100px;
 }
 .email2{
@@ -255,7 +266,7 @@ table.password{
 }
 
 /*전화번호 입력 박스1*/
-.usertel{
+.tel1{
 	width: 70px;
 }
 /*전화번호 입력 박스2*/
@@ -446,7 +457,7 @@ table.password{
 				
 				<tr>
 					<td class="row1">	
-							<input type="text" name="useremail" class="useremail">
+							<input type="text" name="email1" class="email1">
 							@
 							<input type="text" name="email2" readonly="readonly" class="email2"/>
 							<select name="sel1" onchange="emailCheck();">
@@ -457,6 +468,7 @@ table.password{
 								<option value="yahoo.co.kr">야후</option>
 								<option value="">직접입력</option>
 							</select>
+							<input type="hidden" name="useremail" value=""/>
 							<input type="checkbox" onclick="emailCheck();" name="emailCheckbox"><font size="2pt">등록안함</font>
 			
 					</td>
@@ -468,14 +480,14 @@ table.password{
 				</tr>
 				<tr>
 					<td class="row1">
-						<select class="usertel" name="usertel">
+						<select class="tel1" name="tel1">
 							<option value="">선택</option>
 							<option value="010">010</option>
 							<option value="011">011</option>
 						</select>
 						
 						-<input type="text" class="tel2" name="tel2">-<input type="text" class="tel3" name="tel3">
-						
+						<input type="hidden" name="usertel" value=""/>
 						<input type="checkbox"><font size="2pt">등록안함</font>
 						
 					</td>
