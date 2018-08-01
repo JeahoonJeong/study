@@ -84,7 +84,7 @@ public class BoardDAO {
 	} 
 	
 	//전체데이터
-	public List<BoardDTO> getLists(int start, int end){
+	public List<BoardDTO> getLists(int start, int end, String searchKey,String searchValue){
 			
 		List<BoardDTO> lists = new ArrayList<BoardDTO>();
 		
@@ -93,16 +93,23 @@ public class BoardDAO {
 		ResultSet rs = null;
 	
 		try {
+			
+			//searchKey="subject"&searchValue like "%suzi%"
+			
+			searchValue = "%" + searchValue +"%";
+			
 			sql = "select * from(select rownum rnum, data.* from(";
 			sql += "select num, name, subject, hitcount, to_char(created,'YYYY-MM-DD') created "
-					+ "from board order by num desc) data)"
+					+ "from board "
+					+ "where "+searchKey+" like ? "
+					+ "order by num desc) data)"
 					+ "where rnum>=? and rnum<=?";
-			
 			
 			pstmt = conn.prepareStatement(sql);
 			
-			pstmt.setInt(1, start);
-			pstmt.setInt(2, end);
+			pstmt.setString(1, searchValue);
+			pstmt.setInt(2, start);
+			pstmt.setInt(3, end);
 			
 			rs = pstmt.executeQuery();
 			
@@ -131,7 +138,7 @@ public class BoardDAO {
 	}
 	
 	//전체 데이터의 갯수
-	public int getDataCount(){
+	public int getDataCount(String searchKey, String searchValue){
 		
 		int DataCount = 0;
 		
@@ -141,8 +148,11 @@ public class BoardDAO {
 		
 		try {
 			
-			sql = "select count(*) from board";
+			searchValue = "%"+ searchValue+ "%";
+			
+			sql = "select nvl(count(*),0) from board where "+searchKey+" like ?";
 			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, searchValue);
 			rs=pstmt.executeQuery();
 			
 			if(rs.next()){
@@ -161,7 +171,148 @@ public class BoardDAO {
 		return DataCount;
 	}
 	
+	//한개의 데이터 읽기
+	
+	public BoardDTO getReadData(int num){
+		BoardDTO dto = null;
+		PreparedStatement pstmt = null;
+		String sql = "";
+		ResultSet rs = null;
+		
+		try {
+			
+			sql = "select num,name,pwd,email,subject,"
+					+ "content,ipaddr,hitcount,created "
+					+ "from board where num =?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, num);
+			
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()){
+				
+				dto = new BoardDTO();
+				
+				dto.setNum(rs.getInt("num"));
+				dto.setName(rs.getString("name"));
+				dto.setSubject(rs.getString("subject"));
+				dto.setHitCount(rs.getInt("hitcount"));
+				dto.setEmail(rs.getString("email"));
+				dto.setContent(rs.getString("content"));
+				dto.setIpAddr(rs.getString("ipaddr"));
+				dto.setPwd(rs.getString("pwd"));
+				dto.setCreated(rs.getString("created"));
+				
+				
+			}
+			
+			rs.close();
+			pstmt.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return dto;
+	}
+	
+	
+	//조회수 증가
+	
+	public int updateHitCount(int num){
+		
+		int result = 0;
+		
+		PreparedStatement pstmt = null;
+		
+		String sql ="";
+		
+		try {
+			
+			sql = "update board set hitcount=hitcount+1 where num = ?";
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, num);
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.toString());
+		}
+		return result;
+		
+	}
+	
+	// 수정
+	
+	public int updateData(BoardDTO dto){
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql = "";
+		
+		try {
+			
+			sql = "update board set name =?, pwd=?, email=?, subject=?, content=? where num =?";
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, dto.getName());
+			pstmt.setString(2, dto.getPwd());
+			pstmt.setString(3, dto.getEmail());
+			pstmt.setString(4, dto.getSubject());
+			pstmt.setString(5, dto.getContent());
+			pstmt.setInt(6, dto.getNum());
+			
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.toString());
+		}
+		
+		return result;
+	}
+	
+	// 삭제
+	
+	public int deleteData(int num){
+		
+		int result = 0;
+		PreparedStatement pstmt = null;
+		String sql ="";
+		
+		try {
+			
+			sql = "delete from board where num = ?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, num);
+			
+			result = pstmt.executeUpdate();
+			
+			pstmt.close();
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println(e.toString());
+		}
+		
+		return result;
+		
+	}
+	
+	
+	
+	
+	
+	
 }
+
 
 
 

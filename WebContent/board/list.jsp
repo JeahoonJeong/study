@@ -1,3 +1,5 @@
+<%@page import="java.net.URLEncoder"%>
+<%@page import="java.net.URLDecoder"%>
 <%@page import="util.MyUtil"%>
 <%@page import="com.board.BoardDTO"%>
 <%@page import="java.util.List"%>
@@ -13,10 +15,13 @@
 	Connection conn = DBconn.getConnection();
 	BoardDAO dao = new BoardDAO(conn);
 	
+	
+	
 	//페이징-----------------------------------
 	MyUtil myUtil = new MyUtil();
 	
 	String pageNum = request.getParameter("pageNum");//client한테 넘어온 페이지 번호
+
 	
 	int currentPage = 1;
 	
@@ -25,11 +30,29 @@
 		currentPage = Integer.parseInt(pageNum);
 	}
 	
+	// 검색--------------------------------------------
+	String searchKey = request.getParameter("searchKey");
+	String searchValue = request.getParameter("searchValue");
+	
+	
+	if(searchKey!=null){
+		
+		if(request.getMethod().equalsIgnoreCase("GET")){
+			searchValue = URLDecoder.decode(searchValue, "UTF-8");
+			//디코딩
+		}
+	}else{
+		searchKey ="subject";
+		searchValue="";
+	}
+	
+	//----------------------------------------------------
+	
 	//전체데이터 구하기
-	int dataCount = dao.getDataCount();
+	int dataCount = dao.getDataCount(searchKey,searchValue);
 	
 	//전체데이터를 기준으로 총 페이지 수 계산
-	int numPerPage = 3;
+	int numPerPage = 5;
 	int totalPage = myUtil.getPageCount(numPerPage, dataCount);
 	
 	//전체 페이지수 보다 표시할 페이지수가 큰경우 페이지 조정
@@ -42,12 +65,43 @@
 	int start = (currentPage-1)*numPerPage+1;
 	int end = currentPage*numPerPage;
 	
-	List<BoardDTO> lists = dao.getLists(start,end);
+	List<BoardDTO> lists = dao.getLists(start,end,searchKey,searchValue);
+	
+	//검색-----------------------------------
+		String param = "";
+		if(!searchValue.equals("")){
+			
+			param = "?searchKey="+searchKey;
+			param += "&searchValue="+URLEncoder.encode(searchValue,	"UTF-8");
+			//인코딩
+			
+		}
+	//----------------------------------------------
 	
 	//페이징 처리
-	String listUrl = "list.jsp";
+	String listUrl = "list.jsp"+param;//검색기능을 추가하지 않았다.
+								//list.jsp?searchKey=subject&sarchValue='수지'
 	String pageIndexList = myUtil.pageIndexList(currentPage, totalPage, listUrl);
 	//-----------------------------------------
+	
+	//article 주소정리
+	String articleUrl = cp+"/board/article.jsp";
+	
+	if(param.equals("")){
+		articleUrl = articleUrl + "?pageNum="+currentPage;
+	}else{
+		articleUrl = articleUrl + param +"&pageNum="+currentPage;
+	}
+	
+	
+	String createdUrl = cp+"/board/created.jsp";
+	
+	if(param.equals("")){
+		createdUrl = createdUrl + "?pageNum="+currentPage;
+	}else{
+		createdUrl = createdUrl + param +"&pageNum="+currentPage;
+	}
+	
 	
 	
 	DBconn.close();
@@ -62,6 +116,18 @@
 
 <link rel="stylesheet" href="<%=cp%>/board/css/style.css" type="text/css"/>
 <link rel="stylesheet" href="<%=cp%>/board/css/list.css" type="text/css"/>
+
+<script type="text/javascript">
+
+	function sendIt() {
+		var f = document.searchForm;
+		
+		f.action = "<%=cp%>/board/list.jsp";
+		f.submit();
+	}
+	
+</script>
+
 
 </head>
 
@@ -83,13 +149,14 @@
 				<option value="content">내용</option>
 			</select>
 			<input type="text" name="searchValue" class="textFiled"/>
-			<input type="button" value=" 검 색 " class="btn2" onclick=""/>
+			<input type="button" value=" 검 색 " class="btn2" 
+				onclick="sendIt();"/>
 		  </form>
 		</div>
 		<!-- 글올리기 버튼 -->
 		<div id="rightHeader">
 			<input type="button" value=" 글올리기 " class="btn2" 
-				onclick="javascript:location.href='<%=cp%>/board/created.jsp';"/>
+				onclick="javascript:location.href='<%=createdUrl%>';"/>
 		</div>
 	</div>
 	<!-- 번호, 제목, 작성자, 작성일, 조회수  -->
@@ -106,13 +173,16 @@
 				<dt class="hitCount">조회수</dt>
 			</dl>
 		</div>
-		<!-- 번호 제목, 작성자, 작성일, 조회수 데이터베이스에 저장된 각각의 데이터-->
+		<!-- 번호, 제목, 작성자, 작성일, 조회수 데이터베이스에 저장된 각각의 데이터-->
 		<div id="lists">
 			<%for(BoardDTO dto : lists) {%>
 			<dl>
 				<!-- <dd> (describes each term/name) -->
 				<dd class="num"><%=dto.getNum() %></dd>
-				<dd class="subject"><%=dto.getSubject() %></dd>
+				<dd class="subject">
+					<!-- 페이지 넘버와 dto의 넘버를 article.jsp로 넘긴다. -->
+					<a href="<%=articleUrl %>&num=<%=dto.getNum() %>"><%=dto.getSubject() %></a>
+				</dd>
 				<dd class="name"><%=dto.getName() %></dd>
 				<dd class="created"><%=dto.getCreated() %></dd>
 				<dd class="hitCount"><%=dto.getHitCount() %></dd>

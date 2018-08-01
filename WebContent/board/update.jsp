@@ -1,5 +1,9 @@
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
+<%@page import="com.board.BoardDTO"%>
+<%@page import="com.board.BoardDAO"%>
+<%@page import="util.DBconn"%>
+<%@page import="java.sql.Connection"%>
 <%@ page contentType="text/html; charset=UTF-8"%>
 
 <%
@@ -7,40 +11,56 @@
 	String cp = request.getContextPath();
 	
 	String pageNum = request.getParameter("pageNum");
+	int num = Integer.parseInt(request.getParameter("num"));
+	
 	
 	// 검색--------------------------------------------
-		String searchKey = request.getParameter("searchKey");
-		String searchValue = request.getParameter("searchValue");
-		
-		
-		if(searchKey!=null){
+			String searchKey = request.getParameter("searchKey");
+			String searchValue = request.getParameter("searchValue");
 			
-			if(request.getMethod().equalsIgnoreCase("GET")){
-				searchValue = URLDecoder.decode(searchValue, "UTF-8");
-				//디코딩
+			
+			if(searchKey!=null){
+				
+				if(request.getMethod().equalsIgnoreCase("GET")){
+					searchValue = URLDecoder.decode(searchValue, "UTF-8");
+					//디코딩
+				}
+			}else{
+				searchKey ="subject";
+				searchValue="";
 			}
-		}else{
-			searchKey ="subject";
-			searchValue="";
-		}
-		
+			
 		//----------------------------------------------------
-		
-		//검색-----------------------------------
-		String param = "";
-		if(!searchValue.equals("")){
-		
-			param = "?searchKey="+searchKey;
-			param += "&searchValue="+URLEncoder.encode(searchValue,	"UTF-8");
-			param += "&pageNum="+pageNum;
-			//인코딩
-		
-		}else{
-		param = "?pageNum="+pageNum;
-		}
-		//----------------------------------------------
 	
 	
+	
+	Connection conn = DBconn.getConnection();
+	BoardDAO dao = new BoardDAO(conn);
+	
+	BoardDTO dto = dao.getReadData(num);
+	
+	
+	
+	//검색-----------------------------------
+	String param = "";
+	if(!searchValue.equals("")){
+		
+		param = "?searchKey="+searchKey;
+		param += "&searchValue="+URLEncoder.encode(searchValue,	"UTF-8");
+		param += "&pageNum="+pageNum+"&num="+num;
+		//인코딩
+		
+	}else{
+		param = "?pageNum="+pageNum+"&num="+num;
+	}
+	//----------------------------------------------
+	
+	
+	if(dto==null){
+		response.sendRedirect(cp+"/board/list.jsp");
+	}
+	
+	DBconn.close();
 	
 %>
 
@@ -102,7 +122,7 @@
             return;
         }
     	f.content.value = str;
-
+		
     	str = f.pwd.value;
 	    str = str.trim();
         if(!str) {
@@ -110,9 +130,19 @@
             f.pwd.focus();
             return;
         }
+        
+        var pwd1 = f.pwd1.value;
+        pwd1 = pwd1.trim();
+        
+        if(str!=pwd1){
+        	alert("패스워드가 틀립니다.");
+        	f.pwd.focus();
+            return;
+        }
+
     	f.pwd.value = str;
     	
-        f.action = "<%=cp%>/board/created_ok.jsp";
+        f.action = "<%=cp%>/board/update_ok.jsp<%=param%>&pageNum=<%=pageNum %>&num=<%=num%>";
         f.submit();
     }
 
@@ -133,7 +163,7 @@
 			<dl>
 				<dt>제&nbsp;&nbsp;&nbsp;&nbsp;목</dt>
 				<dd>
-				      <input type="text" name="subject" size="74" maxlength="100"  class="boxTF" />
+				      <input type="text" name="subject" value="<%=dto.getSubject() %>" size="74" maxlength="100"  class="boxTF" />
 				</dd>
 			</dl>
 		</div>
@@ -142,7 +172,7 @@
 			<dl>
 				<dt>작성자</dt>
 				<dd>
-				      <input type="text" name="name" size="35" maxlength="20" class="boxTF" />
+				      <input type="text" name="name" value="<%=dto.getName() %>" size="35" maxlength="20" class="boxTF" />
 				</dd>
 			</dl>
 		</div>
@@ -151,7 +181,9 @@
 			<dl>
 				<dt>E-Mail</dt>
 				<dd>
-				      <input type="text" name="email" size="35" maxlength="50" class="boxTF" />
+				      <input type="text" name="email" value="<%=dto.getEmail()==null? "":dto.getEmail() %>" size="35" maxlength="50" class="boxTF" />
+															<!-- 표현식에 삼항연산자 사용할수 있다. -->
+				
 				</dd>
 			</dl>
 		</div>
@@ -160,7 +192,9 @@
 			<dl>
 				<dt>내&nbsp;&nbsp;&nbsp;&nbsp;용</dt>
 				<dd>
-				      <textarea name="content" cols="63" rows="12" class="boxTA"></textarea>
+				      <textarea name="content" cols="63" rows="12" class="boxTA">
+				      	<%=dto.getContent() %>
+				      </textarea>
 				</dd>
 			</dl>
 		</div>
@@ -169,19 +203,21 @@
 			<dl>
 				<dt>패스워드</dt>
 				<dd>
-				      <input type="password" name="pwd" size="35" maxlength="7" class="boxTF" />&nbsp;(게시물 수정 및 삭제시 필요 !!!)
+				      <input type="password" name="pwd" value="" size="35" maxlength="7" class="boxTF" />&nbsp;(게시물 수정 및 삭제시 필요 !!!)
+				      <input type="hidden" name="pwd1" value="<%=dto.getPwd() %>"/>
 				</dd>
 			</dl>
 		</div>
 	</div>
 
 	<div id="bbsCreated_footer">
-        <input type="button" value=" 등록하기 " class="btn2" 
+        <input type="button" value=" 수정하기 " class="btn2" 
         	onclick="sendIt();"/>
-        <input type="reset" value=" 다시입력 " class="btn2" 
-        	onclick="document.myForm.subject.focus();"/>
-        <input type="button" value=" 작성취소 " class="btn2" 
+        <input type="hidden" name="num" value="<%=num%>">
+        <input type="hidden" name="pageNum" value="<%=pageNum%>">
+        <input type="button" value=" 수정취소 " class="btn2" 
         	onclick="javascript:location.href='<%=cp%>/board/list.jsp<%=param%>';"/>
+        	<!-- pageNum 받아와서 수정. -->
 	</div>
 
     </form>
