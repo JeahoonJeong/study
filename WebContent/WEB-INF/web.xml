@@ -9,4 +9,92 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+  
+  
+  <servlet>
+  	<servlet-name>helloServlet</servlet-name>
+  	<servlet-class>com.svt.Test1</servlet-class>
+  </servlet>
+  <!-- 밑의 매핑과 이름이 같아야한다. -->
+  
+  <servlet-mapping>
+  	<servlet-name>helloServlet</servlet-name>
+  	<url-pattern>/hello</url-pattern>
+  </servlet-mapping>
+  <!-- 서블릿 네임은 유일해야한다. -->
+  
+  
+  
+  
+  <!-- 1.ServletConfig 인터페이스 -->
+  <!-- 해당 서블릿에서만 사용가능 -->
+  <servlet>
+  	<servlet-name>test2Servlet</servlet-name>
+  	<servlet-class>com.svt.Test2</servlet-class>
+  		<init-param>
+  			<param-name>name</param-name>
+  			<param-value>배수지</param-value>
+  		</init-param>
+  		
+  		<init-param>
+  			<param-name>age</param-name>
+  			<param-value>25</param-value>
+  		</init-param>
+  </servlet> 
+  
+  
+  <servlet-mapping>
+  	<servlet-name>test2Servlet</servlet-name>
+  	<url-pattern>/itwill</url-pattern>
+  </servlet-mapping>
+  
+  
+  <!-- 1.ServletContext 인터페이스 -->
+  <!-- 동일 웹어플리케이션 내 모든 서블릿,JSP에서 사용가능 -->
+  <context-param>
+  	<param-name>gender</param-name>
+  	<param-value>여자</param-value>
+  </context-param>
+  
+  
+  <servlet>
+  	<servlet-name>test3Servlet</servlet-name>
+  	<servlet-class>com.svt.Test3</servlet-class>
+  </servlet>
+  
+  <servlet-mapping>
+  	<servlet-name>test3Servlet</servlet-name>
+  	<url-pattern>/ss1</url-pattern>
+  </servlet-mapping>
+  
+	  
+
 </web-app>
+
+<!-- 톰캣의 환경설정 파일 -->
+<!-- 서버 처음 실행시 한번 읽는다. -->
+<!-- 서버가 잘 작동하지 않는경우 web.xml파일에 오타가 났을 가능성이 있다. -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
