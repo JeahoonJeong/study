@@ -1,3 +1,4 @@
+<%@page import="util.DBCPConn"%>
 <%@page import="java.net.URLEncoder"%>
 <%@page import="java.net.URLDecoder"%>
 <%@page import="util.MyUtil"%>
@@ -12,7 +13,8 @@
 	request.setCharacterEncoding("utf-8");
 	String cp = request.getContextPath();
 	
-	Connection conn = DBconn.getConnection();
+	//Connection conn = DBconn.getConnection();
+	Connection conn = DBCPConn.getConnection();//데이터베이스 커넥션 풀을 사용하여 연결
 	BoardDAO dao = new BoardDAO(conn);
 	
 	
@@ -46,7 +48,7 @@
 		searchValue="";
 	}
 	
-	//----------------------------------------------------
+	//-----------------------------------------------------
 	
 	//전체데이터 구하기
 	int dataCount = dao.getDataCount(searchKey,searchValue);
@@ -104,8 +106,8 @@
 	
 	
 	
-	DBconn.close();
-	
+	//DBconn.close();
+	DBCPConn.close();//데이터베이스 커넥션 풀 
 %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

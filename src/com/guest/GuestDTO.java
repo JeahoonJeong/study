@@ -46,6 +46,7 @@ public class GuestDTO {
 	}
 	public void setContent(String content) {
 		this.content = content;
+		//this.content = content.replaceAll("\n", "<br/>");
 	}
 	public String getCreated() {
 		return created;

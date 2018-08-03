@@ -134,7 +134,9 @@
 						No&nbsp;<%=dto.getNum()%>. &nbsp;<%=dto.getName()%>(<%=dto.getEmail()%>)
 					</dt>
 					<dt style="text-align: right">
-						홈페이지:<%=dto.getHomepage() %>
+						<% if(dto.getHomepage().equals("")){}else{ %>
+							홈페이지:<%=dto.getHomepage() %>
+						<%} %>
 					</dt>
 					<dt >
 						작성일: <%=dto.getCreated()%>(<%=dto.getIpAddr()%>)
@@ -144,13 +146,12 @@
 
 					</dt>
 					<dd >
-						<%=dto.getContent()%>
+						<%=dto.getContent().replaceAll("\n", "<br/>")%>
 					</dd>
 
-
 					<%
-							}
-						%>
+						}
+					%>
 
 				</dl>
 			</div>
