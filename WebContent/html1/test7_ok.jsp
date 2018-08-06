@@ -1,8 +1,11 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
-<% 
-	request.setCharacterEncoding("utf-8");
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<%	//POST 방식에서 한글깨짐을 방지
+	request.setCharacterEncoding("UTF-8");
 	String cp = request.getContextPath();
 %>
+	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -10,13 +13,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-
-<h1>JSP<br/>
-1.<a href="<%=cp%>/score/list.jsp">성적처리</a><br/>
-2.<a href="<%=cp %>/board/list.jsp">게시판(jsp)</a><br/>
-3.<a href="<%=cp %>/guest/guest.jsp">방명록(jsp)</a><br/>
-4.<a href="<%=cp %>/sboard/list.do">게시판(servlet)</a><br/>
-</h1>
+<!-- 한글을 el로 받아 출력 -->
 
 </body>
 </html>

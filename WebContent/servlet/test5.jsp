@@ -29,7 +29,7 @@
 
 <!-- param.su가 없을때 실행 -->
 <c:if test="${!empty param.su}">
-	<c:if test = "${paran.su%2==0 }">
+	<c:if test = "${param.su%2==0 }">
 		${param.su }:짝수<br/>
 	</c:if>
 	<c:if test = "${param.su%2==1 }">

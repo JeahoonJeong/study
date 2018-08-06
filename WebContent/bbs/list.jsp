@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
 	request.setCharacterEncoding("utf-8");
@@ -17,12 +18,10 @@
 <script type="text/javascript">
 
 	function sendIt() {
-		
 		var f = document.searchForm;
 		f.action = "<%=cp%>/sboard/list.do";
 		//가상주소로 설정
 		f.submit();
-		
 	}
 
 </script>
@@ -37,7 +36,7 @@
 
 	<div id="bbsList_header">
 		<div id="leftHeader">
-		  <form name="searchForm" method="post" action="">
+		  <form name="searchForm" method="get" action="">
 			<select name="searchKey" class="selectFiled">
 				<option value="subject">제목</option>
 				<option value="name">작성자</option>
@@ -64,19 +63,26 @@
 			</dl>
 		</div>
 		<div id="lists">
-			<dl>
-				<dd class="num">1</dd>
-				<dd class="subject">스타일 맞추기 힘들다......</dd>
-				<dd class="name">홍길동</dd>
-				<dd class="created">2000-10-10</dd>
-				<dd class="hitCount">10</dd>
-			</dl>
-
+			<c:forEach var="dto" items="${lists }">
+				<dl>
+					<dd class="num">${dto.num }</dd>
+					<dd class="subject">
+						<a href="${articleUrl }&num=${dto.num}">${dto.subject }</a>
+					</dd>
+					<dd class="name">${dto.name }</dd>
+					<dd class="created">${dto.created }</dd>
+					<dd class="hitCount">${dto.hitCount }</dd>
+				</dl>
+			</c:forEach>
 		</div>
 		<div id="footer">
 			<p>
-				<a href="#">1</a>
-				<a href="#">2</a>
+				<c:if test="${dataCount!=0 }">
+					${pageIndexList }
+				</c:if>
+				<c:if test="${dataCount==0 }">
+					등록된 게시물이 없습니다.
+				</c:if>
 			</p>
 		</div>
 	</div>
