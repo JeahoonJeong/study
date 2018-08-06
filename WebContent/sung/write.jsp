@@ -32,7 +32,7 @@
 			//f.action = "http://192.168.16.25:8080/study/Score/write_ok.jsp"
 			//cp 는 http://192.168.16.25:8080/study
 			
-			f.action = "<%=cp%>/sscore/write_ok.do";
+			f.action = "<%=cp%>/sscore/write_ok.do?pageNum=${param.pageNum}";
 			
 			
 			f.submit();
@@ -139,7 +139,7 @@
 					<input type="reset" class="btn" value="다시입력" onclick="document.myForm.hak.focus();"/>
 					
 					<input type="button" class="btn" value="입력취소" 
-					onclick="javascript:location.href='<%=cp%>/sscore/list.do';">
+					onclick="javascript:location.href='<%=cp%>/sscore/list.do?pageNum=${param.pageNum}';">
 					<!-- onclik에서 사용된 텍스트는 자주 사용되니 암기하는게 좋다. -->
 				</td>
 			</tr>

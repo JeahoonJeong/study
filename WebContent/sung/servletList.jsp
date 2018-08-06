@@ -48,7 +48,7 @@
 	<tr height="35">
 		<td align="right">
 			<input type="button" class="btn" value="등록하기" 
-			onclick="javascript:location.href='write.do&pageNum=${pageNum}'" />
+			onclick="javascript:location.href='write.do?pageNum=${pageNum}'" />
 		</td>
 	</tr>
 </table>

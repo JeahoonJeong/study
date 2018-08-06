@@ -31,7 +31,7 @@
 				return;
 			}
 			
-			f.action = "<%=cp%>/sscore/update_ok.do?pageNum=<%=pageNum%>";
+			f.action = "<%=cp%>/sscore/update_ok.do?pageNum=${param.pageNum}";
 			
 			
 			f.submit();
@@ -133,7 +133,7 @@
 					<input type="button" class="btn" value="수정완료" onclick="sendIt();"/>
 					
 					<input type="button" class="btn" value="수정취소" 
-					onclick="javascript:location.href='<%=cp%>/sscore/list.do?pageNum=<%=pageNum%>';">
+					onclick="javascript:location.href='<%=cp%>/sscore/list.do?pageNum=${param.pageNum}';">
 					<!-- onclik에서 사용된 텍스트는 자주 사용되니 암기하는게 좋다. -->
 				</td>
 			</tr>

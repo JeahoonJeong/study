@@ -65,6 +65,10 @@ public class ScoreServlet extends HttpServlet{
 			int numPerPage = 3;
 			int totalPage = myUtill.getPageCount(numPerPage, dataCount);
 			
+			if(currentPage>totalPage){
+				currentPage=totalPage;
+			}
+			
 			String listUrl = cp+"/sscore/list.do";
 			String pageIndexList;
 			if(dataCount!=0){
@@ -102,7 +106,7 @@ public class ScoreServlet extends HttpServlet{
 			
 			dao.insertData(dto);
 			
-			url = cp+"/sscore/list.do";
+			url = cp+"/sscore/list.do?pageNum="+req.getParameter("pageNum");
 			resp.sendRedirect(url);
 		}else if(uri.indexOf("update.do")!=-1){
 			
