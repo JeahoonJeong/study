@@ -88,6 +88,17 @@
  		<url-pattern>/sboard/*</url-pattern>
  	</servlet-mapping>
  	
+ <!-- sung 성적처리 리스트, servlet 매핑 -->
+ 	<servlet>
+ 		<servlet-name>sungServlet</servlet-name>
+ 		<servlet-class>com.score.ScoreServlet</servlet-class>
+ 	</servlet>
+ 	
+ 	<servlet-mapping>
+ 		<servlet-name>sungServlet</servlet-name>
+ 		<url-pattern>/sscore/*</url-pattern>
+ 	</servlet-mapping>
+ 	
 
 </web-app>
 
