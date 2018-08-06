@@ -6,11 +6,13 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.board.BoardDTO;
+
 import util.DBconn;
 
 public class ScoreDAO {
 	
-	//ÀÇÁ¸¼º ÁÖÀÔ
+	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	private Connection conn;
 	
 	public ScoreDAO(Connection conn){
@@ -19,7 +21,7 @@ public class ScoreDAO {
 		
 	}
 	
-	//1. ÀÔ·Â(write_ok.jsp)
+	//1. ï¿½Ô·ï¿½(write_ok.jsp)
 	
 	public int insertData(ScoreDTO dto){
 		
@@ -44,7 +46,7 @@ public class ScoreDAO {
 			
 		} catch (Exception e) {
 			
-			//tryÀÇ ¿¡·¯ Ã¼Å©, pstmt ¸¦ ¹Þ¾Æ¼­ pstmt close, db close
+			//tryï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã¼Å©, pstmt ï¿½ï¿½ ï¿½Þ¾Æ¼ï¿½ pstmt close, db close
 			try {
 				pstmt.close();
 			} catch (Exception e2) {
@@ -65,7 +67,7 @@ public class ScoreDAO {
 		
 	}
 	
-	//2.µ¥ÀÌÅÍ °¡Á®¿À±â(list.jsp)
+	//2.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(list.jsp)
 	
 	public List<ScoreDTO> getList(){
 		
@@ -123,7 +125,7 @@ public class ScoreDAO {
 		return lists;
 	}
 	
-	//3.¼öÁ¤ÇÒ µ¥ÀÌÅÍ °¡Á®¿À±â
+	//3.ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 	public ScoreDTO getReadData(String hak){
 		
 		ScoreDTO dto = null;
@@ -161,7 +163,7 @@ public class ScoreDAO {
 		
 	}
 	
-	//4.¼öÁ¤
+	//4.ï¿½ï¿½ï¿½ï¿½
 	
 	public int updateData(ScoreDTO dto){
 		
@@ -193,7 +195,7 @@ public class ScoreDAO {
 		
 	}
 	
-	//5.»èÁ¦
+	//5.ï¿½ï¿½ï¿½ï¿½
 	
 	public int deleteData(String hak){
 		int result = 0;
@@ -218,6 +220,92 @@ public class ScoreDAO {
 		return result;
 		
 	}
+	
+	
+	
+	public int getDataCount(){
+	
+		int DataCount = 0;
+		
+		PreparedStatement pstmt = null;
+		String sql= "";
+		ResultSet rs = null;
+		
+		try {
+			
+			sql = "select nvl(count(*),0) from score ";
+			pstmt = conn.prepareStatement(sql);
+			rs=pstmt.executeQuery();
+			
+			if(rs.next()){
+				
+				DataCount = rs.getInt(1);
+				
+			}
+			rs.close();
+			pstmt.close();
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			// TODO: handle exception
+		}
+		
+		return DataCount;
+	}
+	
+	//overload
+	public List<ScoreDTO> getList(int start, int end){
+		
+		List<ScoreDTO> lists = new ArrayList<ScoreDTO>();
+		
+		PreparedStatement pstmt = null;
+		String sql = "";
+		ResultSet rs = null;
+	
+		try {
+			
+			sql = "select * from(select rownum rnum, data.* from(";
+			sql += "select hak,name,kor,eng,mat,(kor+eng+mat) tot, (kor+eng+mat)/3 ave,"
+					+ "rank() over(order by (kor+eng+mat) desc) rank "
+					+ "from score) data)"
+					+ "where rnum>=? and rnum<=?";
+			
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setInt(1, start);
+			pstmt.setInt(2, end);
+			
+			rs = pstmt.executeQuery();
+			
+			while(rs.next()){
+				
+				ScoreDTO dto = new ScoreDTO();
+				
+				dto.setHak(rs.getString("hak"));
+				dto.setName(rs.getString("name"));
+				dto.setKor(rs.getInt("kor"));
+				dto.setEng(rs.getInt("eng"));
+				dto.setMat(rs.getInt("mat"));
+				dto.setTot(rs.getInt("tot"));
+				dto.setAve(rs.getInt("ave"));
+				dto.setRank(rs.getInt("rank"));
+				
+				lists.add(dto);
+			}
+			
+			rs.close();
+			pstmt.close();
+			
+		} catch (Exception e) {
+			System.out.println(e.toString());
+			// TODO: handle exception
+		}
+		
+		return lists;
+	}
+	
+	
+	
 	
 	
 }
