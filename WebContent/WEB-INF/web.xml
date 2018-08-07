@@ -99,6 +99,17 @@
  		<url-pattern>/sscore/*</url-pattern>
  	</servlet-mapping>
  	
+ <!-- 회원가입 servlet -->
+
+	<servlet>
+		<servlet-name>memberServlet</servlet-name>
+		<servlet-class>com.join.MemberServlet</servlet-class>
+	</servlet> 	
+	
+	<servlet-mapping>
+		<servlet-name>memberServlet</servlet-name>
+		<url-pattern>/join/*</url-pattern>
+	</servlet-mapping>
 
 </web-app>
 
