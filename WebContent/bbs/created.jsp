@@ -102,7 +102,8 @@
 			<dl>
 				<dt>작성자</dt>
 				<dd>
-				      <input type="text" name="name" size="35" maxlength="20" class="boxTF" />
+				      <input type="text" name="name" size="35" maxlength="20" class="boxTF" 
+				      value="${sessionScope.customInfo.userName }"  readonly="readonly"/>
 				</dd>
 			</dl>
 		</div>
