@@ -86,7 +86,7 @@
 
 </table>
 	
-	<p align="center" style="font-size: 12pt">
+	<p align="center" style="font-size: 13pt; padding-top: 10px;">
 		${pageIndexList }
 	</p>
 </body>

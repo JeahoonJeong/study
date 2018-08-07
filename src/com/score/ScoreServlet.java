@@ -62,7 +62,7 @@ public class ScoreServlet extends HttpServlet{
 			}
 			
 			int dataCount = dao.getDataCount();//전체 데이터의 갯수
-			int numPerPage = 3;
+			int numPerPage = 5;
 			int totalPage = myUtill.getPageCount(numPerPage, dataCount);
 			
 			if(currentPage>totalPage){
@@ -111,7 +111,6 @@ public class ScoreServlet extends HttpServlet{
 		}else if(uri.indexOf("update.do")!=-1){
 			
 			String hak = req.getParameter("hak");
-			String pageNum = req.getParameter("pagaNum");
 			
 			ScoreDTO dto = dao.getReadData(hak);
 			
@@ -124,9 +123,6 @@ public class ScoreServlet extends HttpServlet{
 			req.setAttribute("kor", dto.getKor());
 			req.setAttribute("eng", dto.getEng());
 			req.setAttribute("mat", dto.getMat());
-			req.setAttribute("pageNum", pageNum);
-			
-			
 			
 			url = "/sung/update.jsp";
 			forward(req, resp, url);
@@ -155,38 +151,6 @@ public class ScoreServlet extends HttpServlet{
 			
 			url = cp+"/sscore/list.do?pageNum="+req.getParameter("pageNum");
 			resp.sendRedirect(url);
-			
-		}else if(uri.indexOf("servletList.do")!=-1){
-			
-			String pageNum = req.getParameter("pageNum");
-			int currentPage = 1;
-			
-			if(pageNum!=null){
-				currentPage = Integer.parseInt(pageNum);
-			}
-			
-			int dataCount = dao.getDataCount();//전체 데이터의 갯수
-			int numPerPage = 3;
-			int totalPage = myUtill.getPageCount(numPerPage, dataCount);
-			
-			String listUrl = cp+"/sscore/servletList.do";
-			String pageIndexList;
-			if(dataCount!=0){
-				pageIndexList = myUtill.pageIndexList(currentPage, totalPage, listUrl);
-			}else{
-				pageIndexList = "리스트에 데이터가 없습니다.";
-			}
-			
-			int start = (currentPage-1)*numPerPage+1;
-			int end = currentPage*numPerPage;
-			
-			List<ScoreDTO> lists = dao.getList(start,end);
-			
-			req.setAttribute("lists", lists);
-			req.setAttribute("pageIndexList", pageIndexList);
-			
-			url="/sung/servletList.jsp";
-			forward(req,resp,url);
 			
 		}
 		
