@@ -11,6 +11,9 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.join.CustomInfo;
 
 import util.DBCPConn;
 import util.MyUtil;
@@ -58,6 +61,16 @@ public class BoardServlet extends HttpServlet{
 		
 		//created.do
 		if(uri.indexOf("created.do")!=-1){
+			
+			HttpSession session = req.getSession();
+			CustomInfo info = (CustomInfo)session.getAttribute("customInfo");//로그인정보를 불러온다.
+			if(info == null){
+				//로그인하지 않았다면 게시판에 글을 쓸수없다.
+				url = "/member/login.jsp";
+				forward(req, resp, url);
+				return;
+				
+			}
 			
 			url ="/bbs/created.jsp";
 			forward(req,resp,url);
