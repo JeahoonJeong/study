@@ -36,6 +36,7 @@
 
 
 	5.<a href="<%=cp %>/sboard/list.do">게시판(servlet)</a><br/>
+	6.<a href="<%=cp %>/file/list.do">파일게시판(servlet)</a><br/>
 
 <c:choose>
 	<c:when test="${empty sessionScope.customInfo.userId }">
