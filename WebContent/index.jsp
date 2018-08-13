@@ -37,15 +37,16 @@
 
 	5.<a href="<%=cp %>/sboard/list.do">게시판(servlet)</a><br/>
 	6.<a href="<%=cp %>/file/list.do">파일게시판(servlet)</a><br/>
+	7.<a href="<%=cp %>/image/list.do">이미지게시판(servlet)</a><br/>
 
 <c:choose>
 	<c:when test="${empty sessionScope.customInfo.userId }">
-		6.<a href="<%=cp %>/join/login.do">로그인</a><br/>
-		7.<a href="<%=cp %>/join/created.do">회원가입</a><br/>
+		8.<a href="<%=cp %>/join/login.do">로그인</a><br/>
+		9.<a href="<%=cp %>/join/created.do">회원가입</a><br/>
 	</c:when>
 	<c:otherwise>
-		6.<a href="<%=cp %>/join/update.do">정보수정</a><br/>
-		7.<a href="<%=cp %>/join/logout.do">로그아웃</a><br/>
+		8.<a href="<%=cp %>/join/update.do">정보수정</a><br/>
+		9.<a href="<%=cp %>/join/logout.do">로그아웃</a><br/>
 	</c:otherwise>
 </c:choose>
 

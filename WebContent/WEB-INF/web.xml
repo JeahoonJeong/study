@@ -132,6 +132,53 @@
   	<servlet-name>imageServlet</servlet-name>
   	<url-pattern>/image/*</url-pattern>
   </servlet-mapping>
+  
+  
+<!-- 타이머 필터 -->
+	<filter>
+		<filter-name>timerFilter</filter-name>
+		<filter-class>com.filter.TimerFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>timerFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> 
+	
+<!-- Charset 필터 -->
+	<filter>
+		<filter-name>charsetFilter</filter-name>
+		<filter-class>com.filter.CharsetFilter</filter-class>
+		<init-param>
+			<param-name>charset</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>charsetFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> 
+	
+<!-- 로그인 필터 -->
+	<filter>
+		<filter-name>loginFilter</filter-name>
+		<filter-class>com.filter.LoginFilter</filter-class>
+	</filter>
+	
+	<filter-mapping>
+		<filter-name>loginFilter</filter-name>
+		<url-pattern>/sboard/*</url-pattern>
+	</filter-mapping> 
+
+<!-- 리스너 -->
+	<listener>
+		<listener-class>com.event.CountManager</listener-class>
+	</listener>
+	
+	<listener>
+		<listener-class>com.event.ContextListenerTest</listener-class>
+	</listener>
 
 </web-app>
 

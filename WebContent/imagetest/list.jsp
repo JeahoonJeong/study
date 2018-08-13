@@ -67,7 +67,22 @@
 					</c:if>				
 					<c:set var = "i" value ="${i+1 }"></c:set>
 				</c:forEach>
-			</table> --%>
+			</table> 
+			
+			
+			공백넣는 코드
+			
+			<c:if test="${n>0 || n%3!=0}">
+				<c:forEach var="i" begin="${n%3+1}" end ="3" step="1">
+					<td>&nbsp;</td>
+				</C:forEach>
+			</c:if>
+				
+			<c:if test="${n!=0}">
+				</tr>
+			</c:if>
+			
+			--%>
 		
 	</div>
 	<div id="footer" >
