@@ -49,7 +49,9 @@
 		9.<a href="<%=cp %>/join/logout.do">로그아웃</a><br/>
 	</c:otherwise>
 </c:choose>
-
+	
+		8.<a href="<%=cp %>/popup/popup.jsp">팝업테스트</a><br/>
+	
 
 </h1>
 
